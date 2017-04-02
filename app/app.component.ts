@@ -14,6 +14,8 @@ export class AppComponent {
 
   constructor(private userService : UserService) {
     this.user = new User();
+    this.user.email = 'u1@example.com';
+    this.user.password = 'qwerty';
     // this.user = <User>{email: 'person@example.com', password: 'let-me-pass'};
   }
 
@@ -28,9 +30,18 @@ export class AppComponent {
   login() {
 
   }
-  
+
   signUp() {
-    this.userService.register(this.user);
+    this.userService.register(this.user)
+      .toPromise()
+      .then(() => {
+        alert('Account created.');
+        this.toggleDisplay();
+      })
+      .catch(err => {
+        let errorString = err.toString();
+        alert(`Error! : ${errorString}`);
+      })
   }
 
   toggleDisplay() {
