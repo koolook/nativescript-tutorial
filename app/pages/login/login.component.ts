@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { User } from "../../shared/user/user";
 import { UserService } from "../../shared/user/user.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "login",
@@ -12,7 +13,7 @@ export class LoginComponent {
   user: User;
   isLoggingIn = true;
 
-  constructor(private userService : UserService) {
+  constructor(private userService : UserService, private router: Router) {
     this.user = new User();
     this.user.email = 'u1@example.com';
     this.user.password = 'qwerty';
@@ -28,6 +29,15 @@ export class LoginComponent {
   }
 
   login() {
+    this.userService.login(this.user)
+    .toPromise()
+    .then(() => {
+        this.router.navigate(['/list']);
+    })
+    .catch(err => {
+    let errorString = err.toString();
+    alert(`Error! : ${errorString}`);
+    })
 
   }
 
